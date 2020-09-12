@@ -67,14 +67,18 @@ parseAtom = do
                '#':'b':_ -> Number $ convertNumber rest
                '#':'o':_ -> Number $ convertNumber rest
                '#':'d':_ -> Number $ convertNumber rest
-               _    -> Atom atom
+               _         -> Atom atom
 
 convertNumber :: String -> Integer
 convertNumber (x:xs) = case x of
                          'x' -> fst $ head $ readHex xs
                          'd' -> read xs
                          'o' -> fst $ head $ readOct xs
-                         --                         'b' ->   TODO !!!!!!!!!!!!!
+                         'b' -> readBin xs
+
+readBin :: String -> Integer
+-- need to reverse xs
+readBin xs = sum $ map $ (\x -> (* (snd x)) . (^ 2) . read (fst x)) $ zip [0..] (reverse xs)
 
 -- standard
 -- parseNumber :: Parser LispVal
