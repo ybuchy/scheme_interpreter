@@ -77,8 +77,10 @@ convertNumber (x:xs) = case x of
                          'b' -> readBin xs
 
 readBin :: String -> Integer
--- need to reverse xs
-readBin xs = sum $ map $ (\x -> (* (snd x)) . (^ 2) . read (fst x)) $ zip [0..] (reverse xs)
+readBin = sum . values
+  where values = map (\(i, n) -> 2 ^ i * n) . enumeration
+        enumeration = zip [0..] . reversedDigits
+        reversedDigits = map (read . pure) . reverse
 
 -- standard
 -- parseNumber :: Parser LispVal
